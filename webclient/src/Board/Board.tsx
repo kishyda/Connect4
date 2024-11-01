@@ -1,51 +1,117 @@
 import React, { useEffect, useState } from 'react';
 import Column from './Column/Column';
 import Buttons from './Buttons/Buttons';
+import Title from './Title/Title';
+import io from 'socket.io-client';
+
 import './Board.css'
 
 type Board = number[][];
 
 type Game = {
-  CPU: boolean;
-  Online: boolean;
-  gameId: number;
-  playerId: number;
+  gameId: number | null;
+  playerId: number | null;
   board: number[][];
+  PvAI: boolean | null;
+  OnlinePvP: boolean | null;
+  LocalPvP: boolean | null;
 }
 
-const App: React.FC = () => {
-  const yCoordinates = [20, 60, 100, 140, 180, 220]; // common y-coordinates for each row of circles
+const Board: React.FC = () => {
+
+  const yCoordinates = [20, 60, 100, 140, 180, 220];
   const [board, setBoard] = useState<Board>(Array.from({length: 7},()=>Array.from({length: 6}, () => 0)));
   const [turn, setTurn] = useState(1);
+  const [PvAI, setPvAI] = useState<boolean>(false);
+  const [OnlinePvP, setOnlinePvP] = useState<boolean>(false);
+  const [LocalPvP, setLocalPvP] = useState<boolean>(false);
+
+  const game: Game = {
+    gameId: null,
+    playerId: null,
+    board: board,
+    PvAI: PvAI,
+    OnlinePvP: OnlinePvP,
+    LocalPvP: LocalPvP,
+  };
+
+  const sendGame: any = async () => {
+    if (game.PvAI === true) {
+      const result = await fetch("OFFLINEGAME", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json', // Indicates the content type
+        },
+        body: JSON.stringify(board),
+      }).then(response => response.json().then((response => response)))
+      return result;
+    } 
+    else if (game.OnlinePvP === true) {
+    } else if (game.LocalPvP === true) {
+    }
+  }
 
   const handleCircleClick = (id: number) => {
     const newBoard = board.map(row  => [...row]);
     for (let i = 0; i < 7; i++) {
       if (board[id][i] === 0 && turn === 1) {
         newBoard[id][i] = 1;
+        sendGame();
         setTurn(2);
         break;
       } else if (board[id][i] === 0 && turn === 2) {
         newBoard[id][i] = 2;
+        sendGame();
         setTurn(1);
         break;
       }
-      // SEND TO THE SERVER THE GAME ID, PLAYER MOVE, 
-      //useEffect(() => {
-      //  const response = fetch("GET /").then(r => {
-      //    console.log(r);
-      //  })
-      //})
     }
     setBoard(newBoard);
   };
 
+  // FOR STARTING THE GAME OFFLINE 
+  useEffect(() => {
+    const response = fetch("/OFFLINEGAMESTART", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Indicates the content type
+      },
+      body: JSON.stringify(game),
+    }).then(r => {
+      console.log(r);
+    })
+  }, [LocalPvP])
+  
+  // FOR STARTING THE GAME ONLINE 
+  useEffect(() => {
+    const response = fetch("/ONLINEGAMESTART", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Indicates the content type
+      },
+      body: JSON.stringify(game),
+    }).then(r => {
+      console.log(r);
+    })
+  }, [OnlinePvP])
+
+  // FOR STARTING THE GAME AGAINST AI 
+  useEffect(() => {
+    const response = fetch("/ONLINEGAMESTART", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Indicates the content type
+      },
+      body: JSON.stringify(game),
+    }).then(r => {
+      console.log(r);
+    })
+  }, [PvAI])
+
   return (
     <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-      <div style={{}}>
-        <button>Offline</button>
-        <button>Online</button>
-      </div>
+      <Title></Title>
+      {(!PvAI && !OnlinePvP && !LocalPvP) ? (<Buttons setPvAI={setPvAI} setOnlinePvP={setOnlinePvP} setLocalPvP={setLocalPvP}></Buttons>) : null}
       <svg
         className='Board'
         style={{ width: '100%', height: 'auto', maxWidth: '700px' }}
@@ -80,4 +146,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Board;
