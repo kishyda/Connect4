@@ -20,7 +20,7 @@ public class Game
 		this.p2p = p2p;
 		this.level = level;
 		initGame();
-		runGameLoop();
+	    //runGameLoop();
 	}
 
 	public int getWinner() {
@@ -153,6 +153,23 @@ public class Game
 			}
 			activePlayer = (activePlayer+1) % 2;
 		}
+	}
+	
+	public void step(Move move) {
+	    for(int i=0; i<2; i++) { //Plays 2 turns (Player 1 + Player 2) together
+    		if(activePlayer == 1) { //CPU's turn, change move (will not enter first)
+		        move = players[activePlayer].getMove(true, board, this, level);
+		        while(!checkLegalMove(board, move, activePlayer)) {
+		            move = players[activePlayer].getMove(true, board, this, level);
+		        }
+    		}
+		    board.setStone(move, activePlayer);
+		    //update legal moves list
+		    if(move.row != 0) legalMoves.set(move.col, new Move(move.row-1, move.col));
+		    else legalMoves.set(move.col, new Move(-1, -1)); //spot not available anymore
+		    checkIfWin(move); //updates winner and gameOver variables
+		    activePlayer = (activePlayer+1) % 2;
+	    }
 	}
 
 	private boolean checkIfConnected(List<Character> consecutiveStones, int windowLen, boolean testFlag) {
