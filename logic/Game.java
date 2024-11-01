@@ -1,0 +1,203 @@
+package logic;
+import java.util.Random;
+import java.lang.Math;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class Game
+{
+	Board board = new Board();
+	Player[] players = new Player[2];
+	private int activePlayer;
+	boolean p2p; //player to player or player vs computer
+	List<Move> legalMoves = new ArrayList<Move>();
+	private int level;
+
+	private int winner;
+	private boolean gameOver;
+	public Game(boolean p2p, int level) {
+		this.p2p = p2p;
+		this.level = level;
+		initGame();
+		runGameLoop();
+	}
+
+	public int getWinner() {
+		return winner;
+	}
+	
+	public int getActivePlayer() { //whose turn is it
+		return activePlayer;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
+	}
+	
+	public void setP2P(boolean p2p) {
+		this.p2p = p2p;
+	}
+
+	public boolean getGameOver() {
+		return gameOver;
+	}
+
+	void initGame() {
+		winner = -1;
+		gameOver = false;
+		activePlayer = 0;
+		players[0] = new Player(false, board, this);
+		boolean isComputer = p2p ? false : true;
+		players[1] = new Player(isComputer, board, this);
+		Collections.addAll(legalMoves, new Move(5,0), new Move(5,1), new Move(5,2), new Move(5,3), new Move(5,4), new Move(5,5), new Move(5,6));
+	}
+
+	private Move gameTurn(int activePlayer) {
+		boolean isComputer = p2p || activePlayer%2==0 ? false : true;
+		Move move = players[activePlayer].getMove(isComputer, board, this, level);
+		while(!checkLegalMove(board, move, activePlayer)) {
+		    move = players[activePlayer].getMove(isComputer, board, this, level);
+		}
+		board.setStone(move, activePlayer);
+		if(move.row != 0) legalMoves.set(move.col, new Move(move.row-1, move.col));
+		else  {
+		    legalMoves.set(move.col, new Move(-1, -1)); //spot not available anymore
+		}
+		return move;
+	}
+
+	public boolean checkHorizontal(Board board, Move move, int windowLen, boolean testFlag) {
+	    boolean horizontalCheck = false;
+		int row = move.row; //only check the row of the last move
+		for(int j=Math.max(0, move.col-(windowLen-1)); j<=Math.min(move.col, board.N_OF_COLS-windowLen); j++) {
+			if(j+windowLen <= board.N_OF_COLS) {
+			    Character[] arr = Arrays.copyOfRange(board.getBoard()[row], j, j+windowLen);
+			    List<Character> consecutiveStones = new ArrayList<Character>();
+                Collections.addAll(consecutiveStones, arr);
+			    if(consecutiveStones.size() == windowLen) horizontalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+			    if(horizontalCheck == true) return horizontalCheck;
+			}
+		}
+		return horizontalCheck;
+	}
+
+    public boolean checkVertical(Board board, Move move, int windowLen, boolean testFlag) {
+	    boolean verticalCheck = false;
+		List<Character> consecutiveStones = new ArrayList<Character>();
+		int col = move.col; //only check the col of the last move
+		for(int i=Math.max(0, move.row-(windowLen-1)); i<=Math.min(move.row, board.N_OF_ROWS-windowLen); i++) {
+			for(int row=0; row<windowLen; row++) { //copyOfRange does not allow slicing along 2nd dim
+			    consecutiveStones.add(board.getBoard()[row+i][col]);
+			}
+			if(consecutiveStones.size() == windowLen) verticalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+			if(verticalCheck == true) return verticalCheck;
+			consecutiveStones.clear();
+		}
+		return verticalCheck;
+	}
+
+    public boolean checkDiagonal(Board board, Move move, int windowLen, boolean testFlag, boolean reverseFlag) {
+	    boolean diagonalCheck = false;
+	    if(move.row+move.col <= 8 && move.row+move.col > 2 && !reverseFlag) { //otherwise left diagonal does not exist
+	    //if(!reverseFlag) {
+	        List<Character> consecutiveStones = new ArrayList<Character>();
+		    for(int i=Math.max(0, move.row-(windowLen-1)), j=Math.max(0, move.col-(windowLen-1)); i<=Math.min(move.row, board.N_OF_ROWS-windowLen) &&
+		    j<=Math.min(move.col, board.N_OF_COLS-windowLen); i++, j++) {
+			        for (int k = 0; k < windowLen; k++) {
+                        consecutiveStones.add(board.getBoard()[i + k][j + k]);
+                        if (i + k + 1 >= board.N_OF_ROWS || j + k + 1 >= board.N_OF_COLS) break;
+                    }
+				    if(consecutiveStones.size() == windowLen) diagonalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+			        if(diagonalCheck == true) return diagonalCheck;
+			        consecutiveStones.clear();
+		    }
+	    }
+	    if(reverseFlag) {
+	        List<Character> consecutiveStones = new ArrayList<Character>();
+		    for(int i=Math.max(0, move.row-(windowLen-1)), j=Math.min(move.col+(move.row-i), board.N_OF_COLS-1); i<=Math.min(move.row, board.N_OF_ROWS-windowLen) &&
+		    j>=move.col; i++, j--) {
+		            for (int k = 0; k < windowLen; k++) {
+			            consecutiveStones.add(board.getBoard()[i + k][j - k]);
+                        if (i + k + 1 >= board.N_OF_ROWS || j - k - 1 < 0) break;
+                    }
+				    if(consecutiveStones.size() == windowLen) diagonalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+			        if(diagonalCheck == true) return diagonalCheck;
+			        consecutiveStones.clear();
+		    }
+	}
+	return diagonalCheck;
+    }
+
+	public boolean checkLegalMove(Board board, Move move, int activePlayer) {
+		//carry down in gravity
+		while(move.row < board.N_OF_ROWS-1 && board.getBoard()[move.row+1][move.col] == '_') move.row++;
+
+		if(board.getBoard()[move.row][move.col] != '_' ||
+		        //|| (move.row < board.N_OF_ROWS-1 && board.board[move.row+1][move.col] == '_') ||
+		        //move.row >= board.N_OF_ROWS ||
+		        move.col >= board.N_OF_COLS) {
+			return false;
+		}
+		return true;
+	}
+
+	public void runGameLoop() {
+		Move move;
+		while(gameOver != true) {
+			board.printBoard();
+			move = gameTurn(activePlayer);
+			if(checkIfWin(move) == true) {
+				System.out.println(getWinner());
+				break;
+			}
+			activePlayer = (activePlayer+1) % 2;
+		}
+	}
+
+	private boolean checkIfConnected(List<Character> consecutiveStones, int windowLen, boolean testFlag) {
+		int left = 0;
+		int sum = 0;
+		int prevSum = 0;
+		//left < right for 2 pointer algorithm
+		//System.out.println("consecutiveStones"+consecutiveStones);
+		while (left < windowLen && !(Math.abs(sum) < Math.abs(prevSum))) { //4 for Connect 4
+			prevSum = sum;
+			if(consecutiveStones.get(left) == 'X') sum++;
+			else if(consecutiveStones.get(left) == 'O') sum--;
+			left++;
+		}
+		if(testFlag) {
+		    //testFlag=true, computer is testing a good strategy move hypothetically
+		    int blanks = 0;
+		    for(Character elem : consecutiveStones) if(elem == '_') blanks++;
+		    //if list is full with same elements with a single blank spot, fill that spot
+		    if(blanks == 1 && (sum == windowLen-1 || sum == -1*(windowLen-1))) return true;
+		}
+		if(sum == windowLen || sum == -1*windowLen) return true;
+		else return false;
+	}
+
+	private boolean checkIfWin(Move move) {
+		if(checkHorizontal(board, move, 4, false) == true) {
+			winner = activePlayer;
+			gameOver = true;
+		}
+		else if(checkVertical(board, move, 4, false) == true) {
+			winner = activePlayer;
+			gameOver = true;
+		}
+		else if(checkDiagonal(board, move, 4, false, false) == true) {
+			winner = activePlayer;
+			gameOver = true;
+		}
+		else if(checkDiagonal(board, move, 4, false, true) == true) {
+			winner = activePlayer;
+			gameOver = true;
+		}
+		return gameOver;
+	}
+
+
+}
