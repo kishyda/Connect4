@@ -113,7 +113,7 @@ public class Game
 			        consecutiveStones.clear();
 		    }
 	    }
-	    if(move.row+move.col <= 8 && move.row+move.col > 2 && !reverseFlag) { //otherwise left diagonal does not exist
+	    if(move.row+move.col <= 8 && move.row+move.col > 2 && reverseFlag) { //otherwise left diagonal does not exist
 	        List<Character> consecutiveStones = new ArrayList<Character>();
 		    for(int i=Math.max(0, move.row-(windowLen-1)), j=Math.min(move.col+(move.row-i), board.N_OF_COLS-1); i<=Math.min(move.row, board.N_OF_ROWS-windowLen) &&
 		    j>=move.col; i++, j--) {
