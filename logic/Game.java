@@ -1,4 +1,3 @@
-package logic;
 import java.util.Random;
 import java.lang.Math;
 import java.util.Arrays;
@@ -21,7 +20,7 @@ public class Game
 		this.p2p = p2p;
 		this.level = level;
 		initGame();
-		runGameLoop();
+	    //runGameLoop();
 	}
 
 	public int getWinner() {
@@ -100,7 +99,7 @@ public class Game
 
     public boolean checkDiagonal(Board board, Move move, int windowLen, boolean testFlag, boolean reverseFlag) {
 	    boolean diagonalCheck = false;
-	    if(move.row+move.col <= 8 && move.row+move.col > 2 && !reverseFlag) { //otherwise left diagonal does not exist
+	    if(Math.abs(move.row-move.col) <= 3 && !reverseFlag) { //otherwise right diagonal does not exist
 	    //if(!reverseFlag) {
 	        List<Character> consecutiveStones = new ArrayList<Character>();
 		    for(int i=Math.max(0, move.row-(windowLen-1)), j=Math.max(0, move.col-(windowLen-1)); i<=Math.min(move.row, board.N_OF_ROWS-windowLen) &&
@@ -114,7 +113,7 @@ public class Game
 			        consecutiveStones.clear();
 		    }
 	    }
-	    if(reverseFlag) {
+	    if(move.row+move.col <= 8 && move.row+move.col > 2 && reverseFlag) { //otherwise left diagonal does not exist
 	        List<Character> consecutiveStones = new ArrayList<Character>();
 		    for(int i=Math.max(0, move.row-(windowLen-1)), j=Math.min(move.col+(move.row-i), board.N_OF_COLS-1); i<=Math.min(move.row, board.N_OF_ROWS-windowLen) &&
 		    j>=move.col; i++, j--) {
@@ -155,13 +154,29 @@ public class Game
 			activePlayer = (activePlayer+1) % 2;
 		}
 	}
+	
+	public void step(Move move) {
+	    for(int i=0; i<2; i++) { //Plays 2 turns (Player 1 + Player 2) together
+    		if(activePlayer == 1) { //CPU's turn, change move (will not enter first)
+		        move = players[activePlayer].getMove(true, board, this, level);
+		        while(!checkLegalMove(board, move, activePlayer)) {
+		            move = players[activePlayer].getMove(true, board, this, level);
+		        }
+    		}
+		    board.setStone(move, activePlayer);
+		    //update legal moves list
+		    if(move.row != 0) legalMoves.set(move.col, new Move(move.row-1, move.col));
+		    else legalMoves.set(move.col, new Move(-1, -1)); //spot not available anymore
+		    checkIfWin(move); //updates winner and gameOver variables
+		    activePlayer = (activePlayer+1) % 2;
+	    }
+	}
 
 	private boolean checkIfConnected(List<Character> consecutiveStones, int windowLen, boolean testFlag) {
 		int left = 0;
 		int sum = 0;
 		int prevSum = 0;
 		//left < right for 2 pointer algorithm
-		//System.out.println("consecutiveStones"+consecutiveStones);
 		while (left < windowLen && !(Math.abs(sum) < Math.abs(prevSum))) { //4 for Connect 4
 			prevSum = sum;
 			if(consecutiveStones.get(left) == 'X') sum++;
