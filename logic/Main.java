@@ -6,9 +6,15 @@ public class Main
 		
 		//game.runGameLoop(); //uncomment to start automatic terminal loop
 		
-		//example use for step method: loop while game is not over, input a move (CPU will play automatically)
+		//example use for step method: loop while game is not over, input a move 
+		//(CPU will play automatically after you)
 		//while(!game.getGameOver()) {
-		//    game.step(new Move(5, 0)); //instead of (5,0), your move goes here
+		//    Move move = new Move(YOUR_GET_ROW, YOUR_GET_COL); //YOUR MOVE ROW/COL GETTER METHOD GOES HERE
+        //    while(!game.checkLegalMove(game.board, move, game.activePlayer)) {
+		//          Move move = new Move(YOUR_GET_ROW, YOUR_GET_COL); //YOUR MOVE ROW/COL GETTER METHOD GOES HERE 
+		                                        //(PREVIOUSLY SELECTED MOVE WAS NOT LEGAL)
+		//    }
+		//    game.step(move); 
 		//}
 	}
 }
