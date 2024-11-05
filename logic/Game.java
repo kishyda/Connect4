@@ -164,7 +164,7 @@ public class Game
 	}
 	
 	public void step(int activePlayer) { //CPU player, move will be decided automatically and not inputted
-	    move = players[activePlayer].getMove(true, board, this, level);
+	    Move move = players[activePlayer].getMove(true, board, this, level);
 		while(!checkLegalMove(board, move, activePlayer)) {
 		    move = players[activePlayer].getMove(true, board, this, level);
 		}
