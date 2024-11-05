@@ -1,4 +1,3 @@
-package logic;
 import java.util.*;
 
 public class Player
@@ -26,7 +25,8 @@ public class Player
         }
         else {
             if(level == 0) return strategyEasy(game);
-            else return strategyHard(board, game);
+            else if(level==1) return strategyHard(board, game);
+            else return strategyAI(board, game);
         }
     }
     
@@ -39,10 +39,22 @@ public class Player
         return game.legalMoves.get(selection);
     }
     
+    private Move strategyAI(Board board, Game game) {
+        /*
+        if(!q_table.contains(board)):
+            q_table[board] = np.zeros(len(env.actionSpace))
+        actionIndex = np.argmax(q_table[board])
+        if (game.legalMoves[actionIndex].row == -1):
+            return strategyEasy(game); //cannot find good move
+        action = game.legalMoves[actionIndex]
+        return action;*/
+        return strategyEasy(game); //dummy return until qtable is implemented
+    }
+    
     private Move strategyHard(Board board, Game game) {
-        for(Move move : game.legalMoves) {
-            if(move.row != -1) { // n/a spot
-                for(int windowLen=4; windowLen>=2; windowLen--) {
+        for(int windowLen=4; windowLen>=2; windowLen--) {
+            for(Move move : game.legalMoves) {
+                if(move.row != -1) { // n/a spot
                     if(game.checkHorizontal(board, move, windowLen, true) || game.checkVertical(board, move, windowLen, true) || 
                     game.checkDiagonal(board, move, windowLen, true, false) || game.checkDiagonal(board, move, windowLen, true, true)) {
                         return move;
