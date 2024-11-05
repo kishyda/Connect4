@@ -83,7 +83,7 @@ public class Game
 	}
 
     public boolean checkVertical(Board board, Move move, int windowLen, boolean testFlag) {
-	    boolean verticalCheck = false;
+        boolean verticalCheck = false;
 		List<Character> consecutiveStones = new ArrayList<Character>();
 		int col = move.col; //only check the col of the last move
 		for(int i=Math.max(0, move.row-(windowLen-1)); i<=Math.min(move.row, board.N_OF_ROWS-windowLen); i++) {
@@ -191,7 +191,7 @@ public class Game
 		    int blanks = 0;
 		    for(Character elem : consecutiveStones) if(elem == '_') blanks++;
 		    //if list is full with same elements with a single blank spot, fill that spot
-		    if(blanks == 1 && (sum == windowLen-1 || sum == -1*(windowLen-1))) return true;
+		    if((blanks == 1) && (sum == windowLen-1 || sum == -1*(windowLen-1))) return true;
 		}
 		if(sum == windowLen || sum == -1*windowLen) return true;
 		else return false;
