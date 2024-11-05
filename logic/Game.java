@@ -9,7 +9,7 @@ public class Game
 {
 	Board board = new Board();
 	Player[] players = new Player[2];
-	private int activePlayer;
+	public int activePlayer;
 	boolean p2p; //player to player or player vs computer
 	List<Move> legalMoves = new ArrayList<Move>();
 	private int level;
@@ -155,21 +155,24 @@ public class Game
 		}
 	}
 	
-	public void step(Move move) {
-	    for(int i=0; i<2; i++) { //Plays 2 turns (Player 1 + Player 2) together
-    		if(activePlayer == 1) { //CPU's turn, change move (will not enter first)
-		        move = players[activePlayer].getMove(true, board, this, level);
-		        while(!checkLegalMove(board, move, activePlayer)) {
-		            move = players[activePlayer].getMove(true, board, this, level);
-		        }
-    		}
-		    board.setStone(move, activePlayer);
-		    //update legal moves list
-		    if(move.row != 0) legalMoves.set(move.col, new Move(move.row-1, move.col));
-		    else legalMoves.set(move.col, new Move(-1, -1)); //spot not available anymore
-		    checkIfWin(move); //updates winner and gameOver variables
-		    activePlayer = (activePlayer+1) % 2;
-	    }
+	public void step(Move move, int activePlayer) { //Human player, move already checked for validity
+	    board.setStone(move, activePlayer);
+		//update legal moves list
+		if(move.row != 0) legalMoves.set(move.col, new Move(move.row-1, move.col));
+		else legalMoves.set(move.col, new Move(-1, -1)); //spot not available anymore
+		checkIfWin(move); //updates winner and gameOver variables
+	}
+	
+	public void step(int activePlayer) { //CPU player, move will be decided automatically and not inputted
+	    move = players[activePlayer].getMove(true, board, this, level);
+		while(!checkLegalMove(board, move, activePlayer)) {
+		    move = players[activePlayer].getMove(true, board, this, level);
+		}
+		board.setStone(move, activePlayer);
+		//update legal moves list
+		if(move.row != 0) legalMoves.set(move.col, new Move(move.row-1, move.col));
+		else legalMoves.set(move.col, new Move(-1, -1)); //spot not available anymore
+		checkIfWin(move); //updates winner and gameOver variables
 	}
 
 	private boolean checkIfConnected(List<Character> consecutiveStones, int windowLen, boolean testFlag) {
