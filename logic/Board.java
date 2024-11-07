@@ -1,4 +1,3 @@
-package logic;
 import java.util.Random;
 import java.lang.Math;
 
@@ -17,6 +16,14 @@ public class Board
         for(int i=0; i<N_OF_ROWS; i++) {
             for(int j=0; j<N_OF_COLS; j++) {
                 boardMatrix[i][j] = '_';
+            }
+        }
+    }
+    
+    void copyBoard(Character[][] copyFromBoard) {
+        for(int i=0; i<N_OF_ROWS; i++) {
+            for(int j=0; j<N_OF_COLS; j++) {
+                boardMatrix[i][j] = copyFromBoard[i][j];
             }
         }
     }
