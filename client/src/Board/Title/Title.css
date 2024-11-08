@@ -1,0 +1,29 @@
+/* Connect4Title.css */
+
+.connect4-title-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-family: 'Courier New', monospace;
+  color: #F1F1F1;
+  padding: 20px;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.title-ascii {
+  font-size: 16px;
+  line-height: 1.2;
+  white-space: pre;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+}
+
+.highlight {
+  color: #ff0000; /* Red highlight for the number 4 */
+  font-size: 36px; /* Slightly larger for the number */
+}
