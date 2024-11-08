@@ -1,0 +1,6 @@
+.Board {
+  border: 10px #D1D1D1;
+  width: 100%;             /* SVG takes full width of its container */
+  min-width: 700px;
+  height: auto; 
+}

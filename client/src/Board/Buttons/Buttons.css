@@ -1,0 +1,32 @@
+/* Container for buttons */
+.button-container {
+  display: flex;
+  justify-content: center; /* Center buttons horizontally */
+  margin: 20px 0; /* Margin above and below the buttons */
+}
+
+/* Style for individual buttons */
+.button {
+  background-color: #3E3E3E; /* Blue background color */
+  color: #F1F1F1; /* White text color */
+  border: none; /* Remove default border */
+  border-radius: 8px; /* Rounded corners */
+  padding: 15px 30px; /* Padding for size */
+  font-size: 1.2rem; /* Larger font size */
+  margin: 0 10px; /* Margin between buttons */
+  margin-bottom: 40px;
+  cursor: pointer; /* Change cursor to pointer */
+  transition: background-color 0.3s, transform 0.2s; /* Transition effects */
+}
+
+/* Hover effect for buttons */
+.button:hover {
+  background-color: #357ABD; /* Darker blue on hover */
+  transform: scale(1.05); /* Slightly enlarge button */
+}
+
+/* Active effect for buttons */
+.button:active {
+  transform: scale(0.95); /* Slightly shrink button when clicked */
+}
+
