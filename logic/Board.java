@@ -1,9 +1,10 @@
+package logic;
 import java.util.Random;
 import java.lang.Math;
 
 public class Board
 {
-    static int N_OF_ROWS = 6;
+static int N_OF_ROWS = 6;
     static int N_OF_COLS = 7;
     char[] stones = {'O', 'X'};
     //int[] stones = {-1, 1}
