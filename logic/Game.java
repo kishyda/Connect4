@@ -1,3 +1,4 @@
+package backend;
 import java.util.Random;
 import java.lang.Math;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ public class Game
 	public int activePlayer;
 	boolean p2p; //player to player or player vs computer
 	List<Move> legalMoves = new ArrayList<Move>();
-	private int level;
+	public int level;
 
 	private int winner;
 	private boolean gameOver;
@@ -75,7 +76,8 @@ public class Game
 			    Character[] arr = Arrays.copyOfRange(board.getBoard()[row], j, j+windowLen);
 			    List<Character> consecutiveStones = new ArrayList<Character>();
                 Collections.addAll(consecutiveStones, arr);
-			    if(consecutiveStones.size() == windowLen) horizontalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+			    if(consecutiveStones.size() == windowLen) horizontalCheck = 
+			        checkIfConnected(consecutiveStones, windowLen, testFlag);
 			    if(horizontalCheck == true) return horizontalCheck;
 			}
 		}
@@ -90,7 +92,8 @@ public class Game
 			for(int row=0; row<windowLen; row++) { //copyOfRange does not allow slicing along 2nd dim
 			    consecutiveStones.add(board.getBoard()[row+i][col]);
 			}
-			if(consecutiveStones.size() == windowLen) verticalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+			if(consecutiveStones.size() == windowLen) verticalCheck = 
+			   checkIfConnected(consecutiveStones, windowLen, testFlag);
 			if(verticalCheck == true) return verticalCheck;
 			consecutiveStones.clear();
 		}
