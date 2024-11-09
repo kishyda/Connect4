@@ -1,4 +1,14 @@
-import java.util.*;
+package backend;
+import java.util.Scanner;
+import java.util.Random;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.io.BufferedReader;
+import java.util.Map;
+
 
 public class Player
 {
@@ -7,11 +17,15 @@ public class Player
     boolean isComputer;
     Board board;
     Game game;
+    Map<Character[][], double[]> q_table = new HashMap<>();
     public Player(boolean isComputer, Board board, Game game) {
         isWinner = false;
         this.isComputer = isComputer;
         this.board = board;
         this.game = game;
+        if(game.level == 2) {
+        q_table = readQTableDictionary();
+        }
     }
     
     public Move getMove(boolean isComputer, Board board, Game game, int level) {
@@ -39,16 +53,75 @@ public class Player
         return game.legalMoves.get(selection);
     }
     
+
+    public static Map<Character[][], double[]> readQTableDictionary() {
+    	String filePath = "qtable.txt";
+        Map<Character[][], double[]> dictionary = new HashMap<>();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // Remove any extra whitespace and handle line continuations
+                line = line.trim();
+
+                // If line contains a grid key, parse it
+                if (line.startsWith("[[") && line.endsWith("]")) {
+                    Character[][] grid = parseGrid(line);
+                    line = br.readLine().trim(); // Move to the next line for the values
+
+                    if (line != null && line.startsWith("[")) {
+                        double[] values = parseValues(line);
+                        dictionary.put(grid, values);
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return dictionary;
+    }
+
+    // Parses a grid from a string in the format [[_, _, _, _, _, _, _], ...]
+    public static Character[][] parseGrid(String gridString) {
+        gridString = gridString.replaceAll("[\\[\\]]", ""); // Remove brackets
+        String[] rows = gridString.split("],\\["); // Split by rows
+
+        List<Character[]> gridList = new ArrayList<>();
+        for (String row : rows) {
+            String[] elements = row.split(",\\s*"); // Split each row by commas
+            Character[] charRow = new Character[elements.length];
+            for (int i = 0; i < elements.length; i++) {
+                charRow[i] = elements[i].charAt(0); // Convert string to Character
+            }
+            gridList.add(charRow);
+        }
+
+        return gridList.toArray(new Character[0][0]);
+    }
+
+    // Parses a line of double values in the format [value1, value2, ...]
+    public static double[] parseValues(String valuesString) {
+        valuesString = valuesString.replaceAll("[\\[\\]]", ""); // Remove brackets
+        String[] values = valuesString.split(",\\s*"); // Split by commas
+        double[] result = new double[values.length];
+        for (int i = 0; i < values.length; i++) {
+            result[i] = Double.parseDouble(values[i]); // Convert each to double
+        }
+        return result;
+    }
+    
     private Move strategyAI(Board board, Game game) {
-        /*
-        if(!q_table.contains(board)):
-            q_table[board] = np.zeros(len(env.actionSpace))
-        actionIndex = np.argmax(q_table[board])
-        if (game.legalMoves[actionIndex].row == -1):
-            return strategyEasy(game); //cannot find good move
-        action = game.legalMoves[actionIndex]
-        return action;*/
-        return strategyEasy(game); //dummy return until qtable is implemented
+        if (!(q_table.containsKey(board.getBoard()))) q_table.put(board.getBoard(), new double[game.legalMoves.size()]);
+        int actionIndex = 0;
+        double q_value = 0.0;
+        for(int i=0; i<q_table.get(board.getBoard()).length; i++) { //find argmax of qtable value
+            if(q_table.get(board.getBoard())[i] > q_value) actionIndex = i;
+        }
+        if (game.legalMoves.get(actionIndex).row == -1) return strategyEasy(game); //cannot find good move
+        Move action = game.legalMoves.get(actionIndex);
+        return action;
+        //return strategyEasy(game); //dummy return until qtable is implemented
     }
     
     private Move strategyHard(Board board, Game game) {
