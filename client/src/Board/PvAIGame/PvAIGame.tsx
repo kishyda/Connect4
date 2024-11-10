@@ -51,8 +51,8 @@ const OfflineAIGame: React.FC<sessionId> = ({sessionID}) => {
                 'Content-Type': 'application/json', // Indicates the content type
             },
             body: JSON.stringify({
-                x: x,
-                y: y,
+                col: x,
+                row: y,
                 sessionID: sessionID, 
             })
         }).then(response => {
@@ -89,8 +89,8 @@ const OfflineAIGame: React.FC<sessionId> = ({sessionID}) => {
             console.log(response);
             if (response.winner !== -1) {
                 const newBoard = board.map(row => [...row]);
-                console.log("THIS IS GET AI MOVE", "column: ", response.x, "row: ", response.y, response.winner);
-                newBoard[response.x][5 - response.y] = 'X';
+                console.log("THIS IS GET AI MOVE", "column: ", response.col, "row: ", response.col, response.winner);
+                newBoard[response.col][5 - response.row] = 'X';
                 setBoard(newBoard);;
                 setGotWinner(true);
                 setWinner(response.winner);
@@ -98,12 +98,12 @@ const OfflineAIGame: React.FC<sessionId> = ({sessionID}) => {
                 setReadyToTakeCircleClick(true);
                 return;
             }
-            if (response.x === -1 || response.y === -1) {
+            if (response.col === -1 || response.row === -1) {
                 return;
             }
             const newBoard = board.map(row => [...row]);
-            console.log("THIS IS GET AI MOVE", "column: ", response.x, "row: ", response.y, response.winner);
-            newBoard[response.x][5 - response.y] = 'X';
+            console.log("THIS IS GET AI MOVE", "column: ", response.col, "row: ", response.row, response.winner);
+            newBoard[response.col][5 - response.row] = 'X';
             setBoard(newBoard);
             setReadyToTakeCircleClick(true);
         });

@@ -51,8 +51,8 @@ const LocalPvPGameBoard: React.FC<sessionID> = ({sessionID}) => {
                 'Content-Type': 'application/json', // Indicates the content type
             },
             body: JSON.stringify({
-                x: x,
-                y: y,
+                col: x,
+                row: y,
                 sessionID: sessionID, 
             })
         }).then(response => {
