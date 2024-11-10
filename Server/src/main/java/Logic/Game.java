@@ -8,12 +8,13 @@ import java.util.List;
 
 public class Game
 {
-	public Board board = new Board();
+    // MADE BOARD PUBLIC. IF PROBLEM, REVERT
+    public Board board = new Board();
 	Player[] players = new Player[2];
 	public int activePlayer;
 	boolean p2p; //player to player or player vs computer
 	List<Move> legalMoves = new ArrayList<Move>();
-	private int level;
+	public int level;
 
 	private int winner;
 	private boolean gameOver;
@@ -27,10 +28,6 @@ public class Game
 	public int getWinner() {
 		return winner;
 	}
-
-    public Board getBoard() {
-        return board;
-    }
 	
 	public int getActivePlayer() { //whose turn is it
 		return activePlayer;
@@ -61,7 +58,7 @@ public class Game
 	private Move gameTurn(int activePlayer) {
 		boolean isComputer = p2p || activePlayer%2==0 ? false : true;
 		Move move = players[activePlayer].getMove(isComputer, board, this, level);
-		while(!checkLegalMove(board, move, activePlayer)) {
+		while(!checkLegalMove(board, move)) {
 		    move = players[activePlayer].getMove(isComputer, board, this, level);
 		}
 		board.setStone(move, activePlayer);
@@ -80,7 +77,8 @@ public class Game
 			    Character[] arr = Arrays.copyOfRange(board.getBoard()[row], j, j+windowLen);
 			    List<Character> consecutiveStones = new ArrayList<Character>();
                 Collections.addAll(consecutiveStones, arr);
-			    if(consecutiveStones.size() == windowLen) horizontalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+			    if(consecutiveStones.size() == windowLen) horizontalCheck = 
+			        checkIfConnected(consecutiveStones, windowLen, testFlag);
 			    if(horizontalCheck == true) return horizontalCheck;
 			}
 		}
@@ -95,7 +93,8 @@ public class Game
 			for(int row=0; row<windowLen; row++) { //copyOfRange does not allow slicing along 2nd dim
 			    consecutiveStones.add(board.getBoard()[row+i][col]);
 			}
-			if(consecutiveStones.size() == windowLen) verticalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+			if(consecutiveStones.size() == windowLen) verticalCheck = 
+			   checkIfConnected(consecutiveStones, windowLen, testFlag);
 			if(verticalCheck == true) return verticalCheck;
 			consecutiveStones.clear();
 		}
@@ -134,7 +133,7 @@ public class Game
 	return diagonalCheck;
     }
 
-	public boolean checkLegalMove(Board board, Move move, int activePlayer) {
+	public boolean checkLegalMove(Board board, Move move) {
 		//carry down in gravity
 		while(move.row < board.N_OF_ROWS-1 && board.getBoard()[move.row+1][move.col] == '_') move.row++;
 
@@ -168,9 +167,9 @@ public class Game
 		checkIfWin(move); //updates winner and gameOver variables
 	}
 	
-	public void step(int activePlayer) { //CPU player, move will be decided automatically and not inputted
+	public Move step(int activePlayer) { //CPU player, move will be decided automatically and not inputted
 	    Move move = players[activePlayer].getMove(true, board, this, level);
-		while(!checkLegalMove(board, move, activePlayer)) {
+		while(!checkLegalMove(board, move)) {
 		    move = players[activePlayer].getMove(true, board, this, level);
 		}
 		board.setStone(move, activePlayer);
@@ -178,6 +177,7 @@ public class Game
 		if(move.row != 0) legalMoves.set(move.col, new Move(move.row-1, move.col));
 		else legalMoves.set(move.col, new Move(-1, -1)); //spot not available anymore
 		checkIfWin(move); //updates winner and gameOver variables
+		return move;
 	}
 
 	private boolean checkIfConnected(List<Character> consecutiveStones, int windowLen, boolean testFlag) {
@@ -219,6 +219,7 @@ public class Game
 			winner = activePlayer;
 			gameOver = true;
 		}
+		else if(legalMoves.stream().allMatch(x -> x.row == -1)) gameOver = true; //Draw, no legal moves left
 		return gameOver;
 	}
 

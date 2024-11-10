@@ -28,4 +28,4 @@ const CircleColumn: React.FC<CircleColumnProps> = ({ x, yCoordinates, xCoordinat
   </>
 );
 
-export default CircleColumn;
+export default CircleColumn

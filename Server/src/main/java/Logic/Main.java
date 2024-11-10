@@ -16,7 +16,7 @@ public class Main
 	//	        Move move = new Move(YOUR_GET_ROW, YOUR_GET_COL); //YOUR MOVE ROW/COL GETTER METHOD GOES HERE
 	//               while(!game.checkLegalMove(game.board, move, game.activePlayer)) {
 	//	            Move move = new Move(YOUR_GET_ROW, YOUR_GET_COL); //YOUR MOVE ROW/COL GETTER METHOD GOES HERE 
-	//	                                                             //(PREVIOUSLY SELECTED MOVE WAS NOT LEGAL)
+	////	                                                             //(PREVIOUSLY SELECTED MOVE WAS NOT LEGAL)
 	//	        }
 	//	        game.step(move, game.activePlayer); 
 	//	        game.activePlayer = (game.activePlayer+1) % 2;
