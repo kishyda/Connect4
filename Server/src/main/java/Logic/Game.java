@@ -8,8 +8,7 @@ import java.util.List;
 
 public class Game
 {
-    // MADE BOARD PUBLIC. IF PROBLEM, REVERT
-    public Board board = new Board();
+	public Board board = new Board();
 	Player[] players = new Player[2];
 	public int activePlayer;
 	boolean p2p; //player to player or player vs computer
@@ -102,36 +101,51 @@ public class Game
 	}
 
     public boolean checkDiagonal(Board board, Move move, int windowLen, boolean testFlag, boolean reverseFlag) {
-	    boolean diagonalCheck = false;
-	    if(Math.abs(move.row-move.col) <= 3 && !reverseFlag) { //otherwise right diagonal does not exist
-	    //if(!reverseFlag) {
-	        List<Character> consecutiveStones = new ArrayList<Character>();
-		    for(int i=Math.max(0, move.row-(windowLen-1)), j=Math.max(0, move.col-(windowLen-1)); i<=Math.min(move.row, board.N_OF_ROWS-windowLen) &&
-		    j<=Math.min(move.col, board.N_OF_COLS-windowLen); i++, j++) {
-			        for (int k = 0; k < windowLen; k++) {
-                        consecutiveStones.add(board.getBoard()[i + k][j + k]);
-                        if (i + k + 1 >= board.N_OF_ROWS || j + k + 1 >= board.N_OF_COLS) break;
+        boolean diagonalCheck = false;
+
+        // Right Diagonal (bottom-left to top-right)
+        if(Math.abs(move.row-move.col) <= 3 && !reverseFlag)  { //otherwise right diagonal does not exist
+            for (int i = Math.max(0, move.row - windowLen + 1); i <= move.row; i++) {
+                for (int j = Math.max(0, move.col - windowLen + 1); j <= move.col; j++) {
+                    List<Character> consecutiveStones = new ArrayList<>();
+                    
+                    // Collect stones along the bottom-left to top-right diagonal
+                    for (int k = 0; k < windowLen; k++) {
+                        if (i + k < board.N_OF_ROWS && j + k < board.N_OF_COLS) {
+                            consecutiveStones.add(board.getBoard()[i + k][j + k]);
+                        }
                     }
-				    if(consecutiveStones.size() == windowLen) diagonalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
-			        if(diagonalCheck == true) return diagonalCheck;
-			        consecutiveStones.clear();
-		    }
-	    }
-	    if(move.row+move.col <= 8 && move.row+move.col > 2 && reverseFlag) { //otherwise left diagonal does not exist
-	        List<Character> consecutiveStones = new ArrayList<Character>();
-		    for(int i=Math.max(0, move.row-(windowLen-1)), j=Math.min(move.col+(move.row-i), board.N_OF_COLS-1); i<=Math.min(move.row, board.N_OF_ROWS-windowLen) &&
-		    j>=move.col; i++, j--) {
-		            for (int k = 0; k < windowLen; k++) {
-			            consecutiveStones.add(board.getBoard()[i + k][j - k]);
-                        if (i + k + 1 >= board.N_OF_ROWS || j - k - 1 < 0) break;
+                    
+                    if (consecutiveStones.size() == windowLen) 
+                        diagonalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+                    if (diagonalCheck) return true;
+                }
+            }
+        }
+
+        // Left Diagonal (bottom-right to top-left)
+        if(move.row+move.col <= 8 && move.row+move.col > 2 && reverseFlag) { //otherwise left diagonal does not exist
+            for (int i = Math.max(0, move.row - windowLen + 1); i <= move.row; i++) {
+                for (int j = Math.min(board.N_OF_COLS - 1, move.col + windowLen - 1); j >= move.col; j--) {
+                    List<Character> consecutiveStones = new ArrayList<>();
+                    
+                    // Collect stones along the bottom-right to top-left diagonal
+                    for (int k = 0; k < windowLen; k++) {
+                        if (i + k < board.N_OF_ROWS && j - k >= 0) {
+                            consecutiveStones.add(board.getBoard()[i + k][j - k]);
+                        }
                     }
-				    if(consecutiveStones.size() == windowLen) diagonalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
-			        if(diagonalCheck == true) return diagonalCheck;
-			        consecutiveStones.clear();
-		    }
-	}
-	return diagonalCheck;
+                    
+                    if (consecutiveStones.size() == windowLen) 
+                        diagonalCheck = checkIfConnected(consecutiveStones, windowLen, testFlag);
+                    if (diagonalCheck) return true;
+                }
+            }
+        }
+
+        return diagonalCheck;
     }
+
 
 	public boolean checkLegalMove(Board board, Move move) {
 		//carry down in gravity

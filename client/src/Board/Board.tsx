@@ -7,6 +7,7 @@ import SVG from './SVG/SVG';
 import './Board.css'
 import LocalPvPGameBoard from './LocalPvPGame/LocalPvPGame';
 import OfflineAIGame from './PvAIGame/PvAIGame'; 
+import OnlinePvPGame from './OnlinePvPGame/OnlinePvPGame';
 
 type sessionID = {
   sessionID: string
@@ -46,7 +47,7 @@ const Board: React.FC<sessionID> = ( {sessionID} ) => {
             </div>}
             {isOnlinePvPGame && 
             <div>
-                <LocalPvPGameBoard sessionID={sessionID}></LocalPvPGameBoard>
+                <OnlinePvPGame sessionID={sessionID}></OnlinePvPGame>
             </div>}
             {isPvAIGame && 
             <div>

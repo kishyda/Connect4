@@ -2,7 +2,7 @@
 .button-container {
   display: flex;
   justify-content: center; /* Center buttons horizontally */
-  margin: 20px 0; /* Margin above and below the buttons */
+  margin: 10px 0; /* Margin above and below the buttons */
 }
 
 /* Style for individual buttons */
@@ -14,7 +14,7 @@
   padding: 15px 30px; /* Padding for size */
   font-size: 1.2rem; /* Larger font size */
   margin: 0 10px; /* Margin between buttons */
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   cursor: pointer; /* Change cursor to pointer */
   transition: background-color 0.3s, transform 0.2s; /* Transition effects */
 }

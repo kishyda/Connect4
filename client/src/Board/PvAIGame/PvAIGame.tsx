@@ -2,6 +2,7 @@ import Column from '../Column/Column'
 import { useEffect, useState } from 'react';
 import WinScreen from '../WinScreen/WinScreen';
 import SVG from '../SVG/SVG';
+import ButtonSet from './ChooseDifficulty';
 
 type sessionId = {
     sessionID: string;
@@ -17,6 +18,9 @@ const OfflineAIGame: React.FC<sessionId> = ({sessionID}) => {
     const [handleCircleClickCalled, setHandleCircleCLickCalled] = useState<number>(1);
     const [readyToTakeCircleClick, setReadyToTakeCircleClick] = useState<boolean>(true);
 
+    const [difficulty, setDifficulty] = useState<number>(-1);
+    const [difficultySet, setDifficultySet] = useState<boolean>(false);
+
     useEffect(() => {
         // Ensure sessionID is available before making the request
         if (!sessionID) {
@@ -24,13 +28,14 @@ const OfflineAIGame: React.FC<sessionId> = ({sessionID}) => {
           return;
         }
 
-        fetch('http://localhost:8080/InitGame/PvAI', {
+        fetch('/InitGame/PvAI', {
             method: "POST",
             headers: {
               'Content-Type': 'application/json', // Specifies the content type
             },
             body: JSON.stringify({
               sessionID: sessionID,
+              difficulty: difficulty,
             }),
         }).then(response => {
             if (!response.ok) {
@@ -42,10 +47,10 @@ const OfflineAIGame: React.FC<sessionId> = ({sessionID}) => {
         }).catch(error => {
             console.error('Error during fetch:', error); 
         });
-    }, []);
+    }, [difficulty]);
 
     const sendGame = async (x: number, y: number) => {
-        await fetch(`http://localhost:8080/game/PvAI/PlayerMove`, {
+        await fetch(`/game/PvAI/PlayerMove`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json', // Indicates the content type
@@ -72,7 +77,11 @@ const OfflineAIGame: React.FC<sessionId> = ({sessionID}) => {
     }
 
     const getAIMove = async () => {
-        await fetch(`http://localhost:8080/game/PvAI/CPUMove`, {
+        if (readyToTakeCircleClick === true) {
+            return
+        }
+        await new Promise(resolve => setTimeout(resolve, 1000));  // Delay of 500ms
+        await fetch(`/game/PvAI/CPUMove`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json', // Indicates the content type
@@ -121,6 +130,7 @@ const OfflineAIGame: React.FC<sessionId> = ({sessionID}) => {
                 setBoard(newBoard);
                 setHandleCircleCLickCalled(handleCircleClickCalled + 1);
                 setReadyToTakeCircleClick(false);
+
                 break;
             } 
         }
@@ -128,16 +138,19 @@ const OfflineAIGame: React.FC<sessionId> = ({sessionID}) => {
     
     useEffect(() => {
         if (!gotWinner && board) {
+
             getAIMove().then();  // Trigger AI move after board update
         }
-    }, [handleCircleClickCalled]);  // Only run when `board` or `gotWinner` changes
+    }, [handleCircleClickCalled, readyToTakeCircleClick, board]);  // Only run when `board` or `gotWinner` changes
 
     return (
         <div>
             {displayWinningScreen && gotWinner ? (
             <WinScreen message={"Player " + winner + " won"} onClose={() => setDisplayWinningScreen(false)} />
             ) : null}
-        <SVG handleCircleClick={handleCircleClick} yCoordinates={yCoordinates} board={board} />
+            {!difficultySet ? (
+            <ButtonSet setDifficulty={setDifficulty} setDifficultySet={setDifficultySet}></ButtonSet>) : null}
+            <SVG handleCircleClick={handleCircleClick} yCoordinates={yCoordinates} board={board} />
         </div>
   );
 }

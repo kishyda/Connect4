@@ -15,7 +15,7 @@ const Login: React.FC<prop> = ({loggedIn, setLoggedIn, setUserId}) => {
   const [passwordError, setPasswordError] = useState('')  
 
   const createAccount = async () => {
-    let response = await fetch('http://localhost:8080/CreateAccount', {
+    let response = await fetch('/CreateAccount', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'
@@ -36,7 +36,7 @@ const Login: React.FC<prop> = ({loggedIn, setLoggedIn, setUserId}) => {
   }
 
   const logIn = async () => {
-    let response = await fetch('http://localhost:8080/LogIn', {
+    let response = await fetch('/LogIn', {
       method: 'POST',
       headers: {
         'Content-type': 'application/json'

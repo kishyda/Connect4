@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.io.BufferedReader;
+import java.io.File;
 import java.util.Map;
 
 
@@ -56,7 +57,7 @@ public class Player
     
 
     public static Map<Character[][], double[]> readQTableDictionary() {
-    	String filePath = "qtable.txt";
+    	String filePath = "/Users/ykp/Dev/Connect4/server/src/main/java/Logic/qtable.txt";
         Map<Character[][], double[]> dictionary = new HashMap<>();
 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {

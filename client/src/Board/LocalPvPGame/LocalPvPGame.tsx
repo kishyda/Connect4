@@ -24,7 +24,7 @@ const LocalPvPGameBoard: React.FC<sessionID> = ({sessionID}) => {
           return;
         }
 
-        fetch('http://localhost:8080/InitGame/LocalPvP', {
+        fetch('/InitGame/LocalPvP', {
             method: "POST",
             headers: {
               'Content-Type': 'application/json', // Specifies the content type
@@ -45,7 +45,7 @@ const LocalPvPGameBoard: React.FC<sessionID> = ({sessionID}) => {
     }, []);
 
     const sendGame = async (x: number, y: number) => {
-        await fetch(`http://localhost:8080/game/LocalPvP`, {
+        await fetch(`/game/LocalPvP`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json', // Indicates the content type
