@@ -8,7 +8,7 @@ type sessionID = {
     sessionID: string
 }
 
-const LocalPvPGameBoard: React.FC<sessionID> = ({sessionID}) => {
+const LocalPvPGameBoard: React.FC<sessionID> = ({ sessionID }) => {
 
     const yCoordinates = [20, 60, 100, 140, 180, 220];
     const [board, setBoard] = useState<string[][]>(Array.from({ length: 7 }, () => Array.from({ length: 6 }, () => ' ')));
@@ -20,27 +20,27 @@ const LocalPvPGameBoard: React.FC<sessionID> = ({sessionID}) => {
     useEffect(() => {
         // Ensure sessionID is available before making the request
         if (!sessionID) {
-          console.error('Session ID is not available.');
-          return;
+            console.error('Session ID is not available.');
+            return;
         }
 
         fetch('/InitGame/LocalPvP', {
             method: "POST",
             headers: {
-              'Content-Type': 'application/json', // Specifies the content type
+                'Content-Type': 'application/json', // Specifies the content type
             },
             body: JSON.stringify({
-              sessionID: sessionID,
+                sessionID: sessionID,
             }),
         }).then(response => {
             if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json(); 
+            return response.json();
         }).then(data => {
             console.log('Response Data:', data);
         }).catch(error => {
-            console.error('Error during fetch:', error); 
+            console.error('Error during fetch:', error);
         });
     }, []);
 
@@ -53,7 +53,7 @@ const LocalPvPGameBoard: React.FC<sessionID> = ({sessionID}) => {
             body: JSON.stringify({
                 col: x,
                 row: y,
-                sessionID: sessionID, 
+                sessionID: sessionID,
             })
         }).then(response => {
             if (!response.ok) {
@@ -94,11 +94,11 @@ const LocalPvPGameBoard: React.FC<sessionID> = ({sessionID}) => {
     return (
         <div>
             {displayWinningScreen && gotWinner ? (
-            <WinScreen message={"Player " + winner + " won"} onClose={() => setDisplayWinningScreen(false)} />
+                <WinScreen message={"Player " + winner + " won"} onClose={() => setDisplayWinningScreen(false)} />
             ) : null}
-        <SVG handleCircleClick={handleCircleClick} yCoordinates={yCoordinates} board={board} />
+            <SVG handleCircleClick={handleCircleClick} yCoordinates={yCoordinates} board={board} />
         </div>
-  );
+    );
 }
 
 export default LocalPvPGameBoard;

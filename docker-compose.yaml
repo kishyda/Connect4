@@ -1,0 +1,18 @@
+services:
+  mongodb:
+    image: mongo
+    volume:
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+  server:
+    build: ./server
+    depends_on: 
+      - "mongodb"
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./Server:/app

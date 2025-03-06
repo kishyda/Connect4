@@ -23,4 +23,3 @@ const Buttons: React.FC<Props> = ({setGameMode}) => {
 };
 
 export default Buttons;
-

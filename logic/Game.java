@@ -1,4 +1,4 @@
-package backend;
+package logic;
 
 import java.util.Random;
 import java.lang.Math;
