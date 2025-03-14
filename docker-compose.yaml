@@ -1,0 +1,9 @@
+services:
+  mongodb:
+    image: mongo
+    volumes:
+      - mongodb-connect4:/data/db
+    ports:
+      - "27017:27017"
+volumes:
+  mongodb-connect4:
