@@ -1,0 +1,101 @@
+/* Global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #212121;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: #333;
+}
+
+/* Main container with background */
+.mainContainer {
+  background-color: #696969;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+/* Form Wrapper */
+.formWrapper {
+  width: 100%;
+}
+
+.title {
+  font-size: 28px;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.subTitle {
+  font-size: 16px;
+  color: #777;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* Input Containers */
+.inputContainer {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.inputBox {
+  background-color: #3E3E3E;
+  color: #F1F1F1;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.inputBox:focus {
+  border-color: #007BFF;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.errorLabel {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+  position: absolute;
+  bottom: -18px;
+  left: 0;
+}
+
+/* Buttons Container */
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Input Button Styles */
+.inputButton {
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  background-color: #3E3E3E;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.inputButton:hover {
+  background-color: #0056b3;
+}
