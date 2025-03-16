@@ -378,8 +378,7 @@ public class ServerApplication {
                 Game game = new Game(p2p, cpuLevel);
                 while (!game.getGameOver()) {
                     Move move = new Move(0, 0);
-                    if (p2p || game.activePlayer == 0) // HUMAN PLAYER STEP
-                    {
+                    if (p2p || game.activePlayer == 0) {
                         try {
                             move = this.outToIn.take();
                         } catch (InterruptedException e) {
@@ -401,8 +400,7 @@ public class ServerApplication {
                             } catch (InterruptedException e) {
                             }
                         }
-                    } else if (!p2p && game.activePlayer == 1) { // COMPUTER PLAYER STEP, it will decide move
-                                                                 // automatically
+                    } else if (!p2p && game.activePlayer == 1) {
                         Move computerMove = game.step(game.activePlayer);
                         game.activePlayer = (game.activePlayer + 1) % 2;
                         if (game.getGameOver() == false) {
@@ -552,9 +550,6 @@ public class ServerApplication {
                         System.out.println("finished turn of player 2");
                     }
                 }
-                ;
-                // try {this.inToOut.put(game.getWinner());}
-                // catch(InterruptedException e) {}
             });
         }
     }

@@ -1,5 +1,5 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
-
+import React from 'react';
+import type { Dispatch, SetStateAction  } from 'react';
 type prop = {
     name: string,
     partyCode: string,

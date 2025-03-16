@@ -1,4 +1,5 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
+import type { SetStateAction, Dispatch } from 'react';
 import './ChooseDifficulty.css';
 
 type prop = {

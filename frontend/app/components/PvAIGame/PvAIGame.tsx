@@ -2,13 +2,9 @@ import { useEffect, useState } from 'react';
 import ButtonSet from './ChooseDifficulty';
 import Board from '../Board/Board';
 import WinScreen from '../WinScreen/WinScreen';
-import parseCookie from '~/util/ParseCookie';
+import { URL } from '~/util/Url';
 
-type sessionId = {
-    sessionID: string;
-}
-
-const OfflineAIGame: React.FC = () => {
+const AIGame: React.FC = () => {
 
     const yCoordinates = [20, 60, 100, 140, 180, 220];
     const [board, setBoard] = useState<string[][]>(Array.from({ length: 7 }, () => Array.from({ length: 6 }, () => ' ')));
@@ -21,46 +17,33 @@ const OfflineAIGame: React.FC = () => {
     const [difficulty, setDifficulty] = useState<number>(-1);
     const [difficultySet, setDifficultySet] = useState<boolean>(false);
 
-    const sessionID = parseCookie(document.cookie);
-
     useEffect(() => {
-        // Ensure sessionID is available before making the request
-        if (!sessionID) {
-          console.error('Session ID is not available.');
-          return;
-        }
-
-        fetch('/InitGame/PvAI', {
+        fetch(`${URL}/InitGame/PvAI`, {
             method: "POST",
+            credentials: "include",
             headers: {
               'Content-Type': 'application/json', // Specifies the content type
             },
             body: JSON.stringify({
-              sessionID: sessionID,
               difficulty: difficulty,
             }),
         }).then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json(); 
-        }).then(data => {
-            console.log('Response Data:', data);
-        }).catch(error => {
-            console.error('Error during fetch:', error); 
         });
     }, [difficulty]);
 
     const sendGame = async (x: number, y: number) => {
-        await fetch(`/game/PvAI/PlayerMove`, {
+        await fetch(`${URL}/game/PvAI/PlayerMove`, {
             method: "POST",
+            credentials: "include", 
             headers: {
                 'Content-Type': 'application/json', // Indicates the content type
             },
             body: JSON.stringify({
                 col: x,
                 row: y,
-                sessionID: sessionID, 
             })
         }).then(response => {
             if (!response.ok) {
@@ -83,16 +66,12 @@ const OfflineAIGame: React.FC = () => {
             return
         }
         await new Promise(resolve => setTimeout(resolve, 1000));  // Delay of 500ms
-        await fetch(`/game/PvAI/CPUMove`, {
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json', // Indicates the content type
-            },
-            body: JSON.stringify({
-                sessionID: sessionID, 
-            })
+        await fetch(`${URL}/game/PvAI/CPUMove`, {
+            method: "GET",
+            credentials: "include",
         }).then(response => {
             if (!response.ok) {
+                console.log(response);
                 throw new Error("Network response alskdfjaksfjlk jwas not ok " + response.statusText);
             }
             return response.json();
@@ -157,4 +136,4 @@ const OfflineAIGame: React.FC = () => {
   );
 }
 
-export default OfflineAIGame;
+export default AIGame;

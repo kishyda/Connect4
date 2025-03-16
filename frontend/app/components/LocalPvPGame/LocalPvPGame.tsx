@@ -3,12 +3,10 @@ import './LocalPvPGame.css'
 import { useEffect, useState } from 'react';
 import Board from '../Board/Board';
 import WinScreen from '../WinScreen/WinScreen';
+import { URL } from '~/util/Url';
 
-type sessionID = {
-    sessionID: string
-}
+const LocalPvPGameBoard: React.FC = () => {
 
-const LocalPvPGameBoard: React.FC<sessionID> = ({sessionID}) => {
 
     const yCoordinates = [20, 60, 100, 140, 180, 220];
     const [board, setBoard] = useState<string[][]>(Array.from({ length: 7 }, () => Array.from({ length: 6 }, () => ' ')));
@@ -18,42 +16,30 @@ const LocalPvPGameBoard: React.FC<sessionID> = ({sessionID}) => {
     const [displayWinningScreen, setDisplayWinningScreen] = useState<boolean>(true);
 
     useEffect(() => {
-        // Ensure sessionID is available before making the request
-        if (!sessionID) {
-          console.error('Session ID is not available.');
-          return;
-        }
-
-        fetch('/InitGame/LocalPvP', {
-            method: "POST",
-            headers: {
-              'Content-Type': 'application/json', // Specifies the content type
-            },
-            body: JSON.stringify({
-              sessionID: sessionID,
-            }),
+        fetch(`${URL}/InitGame/LocalPvP`, {
+            method: "GET",
+            credentials: "include"
         }).then(response => {
             if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return response.json(); 
-        }).then(data => {
-            console.log('Response Data:', data);
-        }).catch(error => {
-            console.error('Error during fetch:', error); 
+        });
+        fetch(`${URL}/test`, {
+            method: 'GET',
+            credentials: 'include'  // Ensure cookies are sent with cross-origin requests
         });
     }, []);
 
     const sendGame = async (x: number, y: number) => {
-        await fetch(`/game/LocalPvP`, {
+        await fetch(`${URL}/game/LocalPvP`, {
             method: "POST",
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json', // Indicates the content type
             },
             body: JSON.stringify({
                 col: x,
                 row: y,
-                sessionID: sessionID, 
             })
         }).then(response => {
             if (!response.ok) {

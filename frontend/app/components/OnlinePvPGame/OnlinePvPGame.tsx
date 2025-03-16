@@ -2,12 +2,10 @@ import Board from '../Board/Board';
 import { useState, useEffect, useRef } from 'react';
 import WinScreen from '../WinScreen/WinScreen';
 import PartyForm from './Party';
+import { URL } from '~/util/Url';
 
-type props = {
-    sessionID: string
-}
 
-const OnlinePvPGame: React.FC<props> = ({sessionID}) => {
+const OnlinePvPGame: React.FC = () => {
 
     const hasMounted = useRef(false);
 
@@ -17,13 +15,13 @@ const OnlinePvPGame: React.FC<props> = ({sessionID}) => {
     const [player1, setPlayer1] = useState(true);
 
     const createParty = () => {
-        fetch('/InitGame/CreateParty', {
+        fetch(`${URL}/InitGame/CreateParty`, {
             method: "POST",
+            credentials: "include", 
             headers: {
               'Content-Type': 'application/json', // Specifies the content type
             },
             body: JSON.stringify({
-              sessionID: sessionID,
               partyCode: partyCode,
             }),
         }).then(response => {
@@ -39,13 +37,13 @@ const OnlinePvPGame: React.FC<props> = ({sessionID}) => {
     };
 
     const joinParty = () => {
-        fetch('/InitGame/JoinParty', {
+        fetch(`${URL}/InitGame/JoinParty`, {
             method: "POST",
+            credentials: "include",
             headers: {
               'Content-Type': 'application/json', // Specifies the content type
             },
             body: JSON.stringify({
-              sessionID: sessionID,
               partyCode: partyCode,
             }),
         }).then(response => {
@@ -84,13 +82,13 @@ const OnlinePvPGame: React.FC<props> = ({sessionID}) => {
             return;
         }
         console.log("GET MOVE", partyCode);
-        await fetch(`/game/OnlinePvP/GetMove`, {
+        await fetch(`${URL}/game/OnlinePvP/GetMove`, {
             method: "POST",
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json', // Indicates the content type
             },
             body: JSON.stringify({
-                sessionID: sessionID, 
                 partyCode: partyCode,
             })
         }).then(response => {
@@ -119,16 +117,16 @@ const OnlinePvPGame: React.FC<props> = ({sessionID}) => {
     }
 
     const sendMove = async (column: number, row: number) => {
-        console.log("SEND MOVE PACKAGE: ", column, row, sessionID, partyCode);
-        await fetch(`/game/OnlinePvP/PostMove`, {
+        console.log("SEND MOVE PACKAGE: ", column, row, partyCode);
+        await fetch(`${URL}/game/OnlinePvP/PostMove`, {
             method: "POST",
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json', // Indicates the content type
             },
             body: JSON.stringify({
                 col: column,
                 row: row,
-                sessionID: sessionID, 
                 partyCode: partyCode,
             })
         }).then(response => {
@@ -150,13 +148,12 @@ const OnlinePvPGame: React.FC<props> = ({sessionID}) => {
     }
 
     const getWinner = async () => {
-        fetch('/game/OnlinePvP/CheckWin', {
+        fetch(`${URL}/game/OnlinePvP/CheckWin`, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json', // Indicates the content type
             },
             body: JSON.stringify({
-                sessionID: sessionID,
                 partyCode: partyCode,
             })
         }).then(response => {

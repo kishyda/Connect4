@@ -1,4 +1,4 @@
-package backend;
+package logic;
 
 import java.util.Scanner;
 import java.util.Random;

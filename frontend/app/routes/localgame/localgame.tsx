@@ -1,7 +1,7 @@
+import LocalPvPGameBoard from "~/components/LocalPvPGame/LocalPvPGame";
+
 export default function localgame() {
     return (
-        <div>
-            LocalGame
-        </div>
+        <LocalPvPGameBoard />
     );
 }
