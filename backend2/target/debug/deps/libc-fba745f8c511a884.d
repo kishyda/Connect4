@@ -1,0 +1,12 @@
+/Users/ykp/Dev/Projects/Connect4/backend2/target/debug/deps/liblibc-fba745f8c511a884.rmeta: /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/lib.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/macros.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/primitives.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/mod.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/mod.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/apple/mod.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/apple/b64/mod.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/apple/b64/aarch64/mod.rs
+
+/Users/ykp/Dev/Projects/Connect4/backend2/target/debug/deps/libc-fba745f8c511a884.d: /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/lib.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/macros.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/primitives.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/mod.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/mod.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/apple/mod.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/apple/b64/mod.rs /Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/apple/b64/aarch64/mod.rs
+
+/Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/lib.rs:
+/Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/macros.rs:
+/Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/primitives.rs:
+/Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/mod.rs:
+/Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/mod.rs:
+/Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/apple/mod.rs:
+/Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/apple/b64/mod.rs:
+/Users/ykp/.cargo/registry/src/index.crates.io-6f17d22bba15001f/libc-0.2.171/src/unix/bsd/apple/b64/aarch64/mod.rs:
