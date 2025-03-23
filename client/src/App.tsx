@@ -1,4 +1,5 @@
-import useState from 'react';
+import React, { useContext, useState } from 'react';
+import logo from './logo.svg';
 import './App.css';
 import Board from './Board/Board'
 
